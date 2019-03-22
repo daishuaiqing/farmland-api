@@ -1,8 +1,8 @@
-import com.emojiet.gms.model.R;
-import com.emojiet.gms.entity.${model_name_uc};
-import com.emojiet.gms.service.${model_name_uc}Service;
-import com.emojiet.gms.model.MyPage;
-import com.emojiet.gms.query.${model_name_uc}Query;
+import ${package_name}.model.R;
+import ${package_name}.domain.${model_name_uc};
+import ${package_name}.service.${model_name_uc}Service;
+import ${package_name}.model.MyPage;
+import ${package_name}.query.${model_name_uc}Query;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

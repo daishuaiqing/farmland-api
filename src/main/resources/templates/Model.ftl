@@ -6,11 +6,9 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import java.sql.Timestamp;
 
 @Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@ApiModel(value="${model_name_uc}")
 @SQLDelete(sql = "update ${model_name} set is_deleted=1 where id=?")
 @Where(clause = "is_deleted = 0")
 @Table(name = "${model_name}")
@@ -20,20 +18,16 @@ public class ${model_name_uc}  {
     <#if model_column?exists>
         <#list model_column as model>
     <#if model.column_name = 'id'>
-    @ApiModelProperty(hidden=true)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     <#elseif model.column_name = 'create_time'>
-    @ApiModelProperty(hidden=true)
     @Column(name = "create_time")
-    private Timestamp createTime;
+    private LocalDateTime createTime;
     <#elseif model.column_name = 'update_time'>
-    @ApiModelProperty(hidden=true)
     @Column(name = "update_time")
-    private Timestamp updateTime;
+    private LocalDateTime updateTime;
     <#elseif model.column_name = 'is_deleted'>
-    @ApiModelProperty(hidden=true)
     @Column(name = "is_deleted")
     private Integer deleted;
     <#else>
@@ -43,15 +37,15 @@ public class ${model_name_uc}  {
     </#if>
     <#if model.data_type = 'datetime'>
     @Column(name = "${model.column_name}")
-    private Timestamp ${model.column_name_uc?uncap_first};//${model.column_comment!}
+    private LocalDateTime ${model.column_name_uc?uncap_first};//${model.column_comment!}
     </#if>
     <#if model.data_type = 'date'>
     @Column(name = "${model.column_name}")
-    private Date ${model.column_name_uc?uncap_first};//${model.column_comment!}
+    private LocalDate ${model.column_name_uc?uncap_first};//${model.column_comment!}
     </#if>
     <#if model.data_type = 'time'>
     @Column(name = "${model.column_name}")
-    private Time ${model.column_name_uc?uncap_first};//${model.column_comment!}
+    private LocalTime ${model.column_name_uc?uncap_first};//${model.column_comment!}
     </#if>
     <#if model.data_type = 'int'>
     @Column(name = "${model.column_name}")

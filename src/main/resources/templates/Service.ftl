@@ -1,5 +1,5 @@
-import com.daishuaiqing.farmland.domain.${model_name_uc};
-import com.daishuaiqing.farmland.query.${model_name_uc}Query;
+import ${package_name}.domain.${model_name_uc};
+import ${package_name}.query.${model_name_uc}Query;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.util.List;

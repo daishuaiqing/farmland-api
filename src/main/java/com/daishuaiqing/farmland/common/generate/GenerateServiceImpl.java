@@ -5,6 +5,7 @@ import com.daishuaiqing.farmland.util.StringUtils;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -20,6 +21,8 @@ public class GenerateServiceImpl {
 
     @Autowired
     GenerateDaoImpl generateDao;
+    @Value("${code.generate.package}")
+    private String packageName;
 
     public void GenerateCode(String tableName) {
         //输出路径
@@ -33,7 +36,7 @@ public class GenerateServiceImpl {
         if(!serviceImplPath.exists()) serviceImplPath.mkdirs();
         File daoPath = new File(System .getProperty("user.dir")+"\\out\\dao");
         if(!daoPath.exists()) daoPath.mkdirs();
-        File modelPath = new File(System .getProperty("user.dir")+"\\out\\entity");
+        File modelPath = new File(System .getProperty("user.dir")+"\\out\\domain");
         if(!modelPath.exists()) modelPath.mkdirs();
         File queryPath = new File(System .getProperty("user.dir")+"\\out\\query");
         if(!queryPath.exists()) queryPath.mkdirs();
@@ -58,6 +61,7 @@ public class GenerateServiceImpl {
         Map<String,Object> dataMap = new HashMap<String,Object>();
         dataMap.put("model_column",columns);
         dataMap.put("model_name",tableName);
+        dataMap.put("package_name",packageName);
         dataMap.put("model_name_uc",StringUtils.replaceUnderLineAndUpperCase(tableName));
         generateFileByTemplate("Model.ftl",new File(modelPath+"\\"+StringUtils.replaceUnderLineAndUpperCase(tableName)+".java"),dataMap);
         generateFileByTemplate("Controller.ftl",new File(controllerPath+"\\"+StringUtils.replaceUnderLineAndUpperCase(tableName)+"Controller.java"),dataMap);
