@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
-@Api(tags = "代码生成器")
 @RestController
 public class GenerateController {
 

@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@Api(tags = "图片管理")
 @RestController
 public class UploadConroller {
     @Autowired

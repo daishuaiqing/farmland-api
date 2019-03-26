@@ -31,7 +31,7 @@ public class GenerateDaoImpl {
      * @return
      */
     public List<Map<String,Object>> findColumns(String tableName){
-        String sql = "SELECT column_name,data_type,column_comment FROM information_schema.columns WHERE table_schema='"+databaseName+"' AND table_name=?;";
+        String sql = "SELECT column_name,data_type,column_comment FROM information_schema.columns WHERE table_schema='"+databaseName+"' AND table_name=? ORDER BY ORDINAL_POSITION;";
         return jdbcTemplate.queryForList(sql,tableName);
     }
 
