@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -22,6 +24,17 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private CategoryDao categoryDao;
 
+    /**
+     * category 设置默认值
+     * 创建时间，更新时间，是否删除
+     * @param category
+     */
+    private void setDefaultValue(Category category) {
+        category.setCreateTime(LocalDateTime.now());
+        category.setUpdateTime(LocalDateTime.now());
+        category.setDeleted(0);
+    }
+
     @Override
     public CommonResult findById(Long id) {
         return new CommonResult().success(categoryDao.findById(id).orElse(null));
@@ -34,6 +47,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CommonResult add(Category category) {
+        setDefaultValue(category);
         return new CommonResult().success(categoryDao.save(category));
     }
 
