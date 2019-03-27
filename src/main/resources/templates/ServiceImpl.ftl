@@ -20,6 +20,17 @@ public class ${model_name_uc}ServiceImpl implements ${model_name_uc}Service {
     @Autowired
     private ${model_name_uc}Dao ${model_name_uc?uncap_first}Dao;
 
+    /**
+    * ${model_name_uc?uncap_first} 设置默认值
+    * 创建时间，更新时间，是否删除
+    * @param ${model_name_uc?uncap_first}
+    */
+    private void setDefaultValue(${model_name_uc} ${model_name_uc?uncap_first}) {
+        ${model_name_uc?uncap_first}.setCreateTime(LocalDateTime.now());
+        ${model_name_uc?uncap_first}.setUpdateTime(LocalDateTime.now());
+        ${model_name_uc?uncap_first}.setDeleted(0);
+    }
+
     @Override
     public CommonResult findById(Long id) {
         return new CommonResult().success(${model_name_uc?uncap_first}Dao.findById(id).orElse(null));
@@ -32,10 +43,8 @@ public class ${model_name_uc}ServiceImpl implements ${model_name_uc}Service {
 
     @Override
     public CommonResult add(${model_name_uc} ${model_name_uc?uncap_first}) {
-        ${model_name_uc?uncap_first}.setCreateTime(new Timestamp(System.currentTimeMillis()));
-        ${model_name_uc?uncap_first}.setDeleted(0);
-        ${model_name_uc?uncap_first}.setUpdateTime(new Timestamp(System.currentTimeMillis()));
-        return ${model_name_uc?uncap_first}Dao.save(${model_name_uc?uncap_first});
+        setDefaultValue(${model_name_uc?uncap_first});
+        return new CommonResult().success(${model_name_uc?uncap_first}Dao.save(${model_name_uc?uncap_first}));
     }
 
     @Override
@@ -44,7 +53,7 @@ public class ${model_name_uc}ServiceImpl implements ${model_name_uc}Service {
         ${model_name_uc?uncap_first}.setCreateTime(data.getCreateTime());
         ${model_name_uc?uncap_first}.setDeleted(data.getDeleted());
         ${model_name_uc?uncap_first}.setUpdateTime(new Timestamp(System.currentTimeMillis()));
-        return ${model_name_uc?uncap_first}Dao.save(${model_name_uc?uncap_first});
+        return new CommonResult().success(${model_name_uc?uncap_first}Dao.save(${model_name_uc?uncap_first}));
     }
 
     @Override
@@ -68,13 +77,13 @@ public class ${model_name_uc}ServiceImpl implements ${model_name_uc}Service {
             }
 
         };
-         return ${model_name_uc?uncap_first}Dao.findAll(specification,pageable);
+         return new CommonResult().success(${model_name_uc?uncap_first}Dao.findAll(specification,pageable));
     }
 
     @Override
     public CommonResult deleteById(Long id) {
         ${model_name_uc?uncap_first}Dao.deleteById(id);
-        return !${model_name_uc?uncap_first}Dao.existsById(id);
+        return new CommonResult().success(!${model_name_uc?uncap_first}Dao.existsById(id));
     }
 
 

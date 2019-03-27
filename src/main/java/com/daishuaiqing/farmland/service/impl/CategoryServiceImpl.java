@@ -53,7 +53,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CommonResult modify(Category category) {
-
         return new CommonResult().success(categoryDao.save(category));
     }
 
