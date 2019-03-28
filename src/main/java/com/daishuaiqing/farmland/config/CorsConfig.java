@@ -6,6 +6,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+/**
+ * 跨域请求配置
+ */
 @Configuration
 public class CorsConfig {
     @Value("${web.cors.allowed-origins}")

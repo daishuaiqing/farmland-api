@@ -30,7 +30,7 @@ public class CategoryController {
     @ApiOperation("全部")
     @GetMapping("/category/find/all")
     public CommonResult findAll(){
-        return categoryService.findAll();
+        return new CommonResult().success(categoryService.findAll());
     }
 
     @ApiOperation("新增")
@@ -52,7 +52,7 @@ public class CategoryController {
 
     @ApiOperation("修改")
     @PostMapping("/category/modify/{id}")
-    public CommonResult modify(@PathVariable(name = "id",required = true) Long id,
+    public CommonResult modify(@PathVariable(name = "id",required = true) Integer id,
                                @Valid @ApiParam @RequestBody Category category,
                                BindingResult bindingResult) {
         category.setId(id);

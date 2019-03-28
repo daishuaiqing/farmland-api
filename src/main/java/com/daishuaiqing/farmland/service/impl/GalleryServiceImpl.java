@@ -6,6 +6,8 @@ import com.daishuaiqing.farmland.service.GalleryService;
 import com.daishuaiqing.farmland.query.GalleryQuery;
 import com.daishuaiqing.farmland.vo.CommonResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -61,27 +63,13 @@ public class GalleryServiceImpl implements GalleryService {
     }
 
     @Override
-    public CommonResult list(Pageable pageable,GalleryQuery galleryQuery) {
-        Specification<Gallery> specification = new Specification<Gallery>() {
-            @Override
-            public Predicate toPredicate(Root<Gallery> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                List<Predicate> predicates = new ArrayList<>();
-                /*if(StringUtils.isNotBlank(galleryQuery)){
-                    predicates.add(cb.like(root.get("courseName").as(String.class),"%"+galleryQuery.getCourseName()+"%"));
-                }
-                if(gallery!=null){
-                    predicates.add(cb.equal(root.get("state").as(Boolean.class),galleryQuery.getState()));
-                }*/
-                if (predicates.size() == 0) {
-                    return null;
-                }
-                Predicate[] predicateArr = new Predicate[predicates.size()];
-                predicateArr = predicates.toArray(predicateArr);
-                return cb.and(predicateArr);
-            }
-
-        };
-         return new CommonResult().success(galleryDao.findAll(specification,pageable));
+    public Page<Gallery> list(Pageable pageable, GalleryQuery galleryQuery) {
+        Gallery gallery = new Gallery();
+        if(galleryQuery.getCategoryId()!=null){
+            gallery.setCategoryId(galleryQuery.getCategoryId());
+        }
+        Example<Gallery> example = Example.of(gallery);
+        return galleryDao.findAll(example,pageable);
     }
 
     @Override

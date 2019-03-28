@@ -1,13 +1,13 @@
 package com.daishuaiqing.farmland.authc;
 
-import org.json.JSONObject;
-
 import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class AuthcFilter extends HttpServlet implements Filter {
 //    @Autowired
@@ -32,7 +32,7 @@ public class AuthcFilter extends HttpServlet implements Filter {
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json; charset=utf-8");
             PrintWriter out = response.getWriter();
-            JSONObject res = new JSONObject();
+            Map res = new ConcurrentHashMap();
             res.put("status",2);
             res.put("msg","无权限");
             res.put("data","");

@@ -6,6 +6,10 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * 配置统一的RestTemplate
+ * 由ClientHttpRequest工厂创建
+ */
 @Configuration
 public class RestTemplateConfig {
     @Bean

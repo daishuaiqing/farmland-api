@@ -6,6 +6,7 @@ import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+
 import java.time.LocalDateTime;
 
 
@@ -19,7 +20,7 @@ public class Category  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     /**
      * 分类名称

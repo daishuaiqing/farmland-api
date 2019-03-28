@@ -68,6 +68,6 @@ public class GalleryController {
     @GetMapping("/gallery/list")
     public CommonResult list(PageParam page, GalleryQuery galleryQuery) {
         Pageable pageable = PageRequest.of(page.getPage(),page.getSize());
-        return galleryService.list(pageable,galleryQuery);
+        return new CommonResult().success(galleryService.list(pageable,galleryQuery));
     }
 }

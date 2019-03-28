@@ -2,11 +2,14 @@ package com.daishuaiqing.farmland.service.impl;
 
 import com.daishuaiqing.farmland.domain.Category;
 import com.daishuaiqing.farmland.dao.CategoryDao;
+import com.daishuaiqing.farmland.domain.Gallery;
 import com.daishuaiqing.farmland.service.CategoryService;
 import com.daishuaiqing.farmland.query.CategoryQuery;
 import com.daishuaiqing.farmland.vo.CommonResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -41,8 +44,13 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CommonResult findAll() {
-        return new CommonResult().success(categoryDao.findAll());
+    public List<Category> findAll(CategoryQuery categoryQuery, Sort sort) {
+        Category category = new Category();
+        if(categoryQuery.getShow()!=null){
+            category.setIsShow(categoryQuery.getShow());
+        }
+        Example<Category> example = Example.of(category);
+        return categoryDao.findAll(example,sort);
     }
 
     @Override
@@ -84,6 +92,11 @@ public class CategoryServiceImpl implements CategoryService {
     public CommonResult deleteById(Long id) {
         categoryDao.deleteById(id);
         return new CommonResult().success(!categoryDao.existsById(id));
+    }
+
+    @Override
+    public List<Category> findAll() {
+        return categoryDao.findAll();
     }
 
 

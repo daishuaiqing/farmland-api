@@ -4,12 +4,15 @@ import com.daishuaiqing.farmland.domain.Category;
 import com.daishuaiqing.farmland.query.CategoryQuery;
 import com.daishuaiqing.farmland.vo.CommonResult;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
+import java.util.List;
 
 public interface CategoryService {
 
     CommonResult findById(Long id);
 
-    CommonResult findAll();
+    List<Category> findAll(CategoryQuery categoryQuery, Sort sort);
 
     CommonResult add(Category category);
 
@@ -19,4 +22,5 @@ public interface CategoryService {
 
     CommonResult deleteById(Long id);
 
+    List<Category> findAll();
 }
