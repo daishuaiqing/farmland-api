@@ -11,6 +11,7 @@ import com.daishuaiqing.farmland.service.IndexService;
 import com.daishuaiqing.farmland.vo.CommonResult;
 import com.daishuaiqing.farmland.vo.IndexResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +27,8 @@ public class IndexServiceImpl implements IndexService {
     private CategoryService categoryService;
     @Autowired
     private GalleryService galleryService;
+    @Value("${web.image.url.prefix}")
+    private String imageUrlPrefix;
 
     /**
      * 小程序首页数据集合
@@ -50,6 +53,9 @@ public class IndexServiceImpl implements IndexService {
             GalleryQuery galleryQuery = new GalleryQuery();
             galleryQuery.setCategoryId(categories.get(0).getId());
             List<Gallery> galleries = galleryService.list(pageable,galleryQuery).getContent();
+            for (Gallery gallery: galleries){
+                gallery.setUrl(imageUrlPrefix+gallery.getUrl());
+            }
             indexResult.setGalleries(galleries);
             return indexResult;
         }
