@@ -1,8 +1,10 @@
 package com.daishuaiqing.farmland.service;
 
 import com.daishuaiqing.farmland.domain.WxUser;
+import com.daishuaiqing.farmland.dto.WxLoginInfo;
 import com.daishuaiqing.farmland.query.WxUserQuery;
 import com.daishuaiqing.farmland.vo.CommonResult;
+import com.daishuaiqing.farmland.vo.WxUserResult;
 import org.springframework.data.domain.Pageable;
 
 public interface WxUserService {
@@ -19,4 +21,5 @@ public interface WxUserService {
 
     CommonResult deleteById(Long id);
 
+    WxUserResult userLogin(WxLoginInfo wxLoginInfo);
 }

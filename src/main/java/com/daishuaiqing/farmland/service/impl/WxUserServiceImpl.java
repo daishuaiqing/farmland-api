@@ -2,9 +2,11 @@ package com.daishuaiqing.farmland.service.impl;
 
 import com.daishuaiqing.farmland.domain.WxUser;
 import com.daishuaiqing.farmland.dao.WxUserDao;
+import com.daishuaiqing.farmland.dto.WxLoginInfo;
 import com.daishuaiqing.farmland.service.WxUserService;
 import com.daishuaiqing.farmland.query.WxUserQuery;
 import com.daishuaiqing.farmland.vo.CommonResult;
+import com.daishuaiqing.farmland.vo.WxUserResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -88,6 +90,16 @@ public class WxUserServiceImpl implements WxUserService {
     public CommonResult deleteById(Long id) {
         wxUserDao.deleteById(id);
         return new CommonResult().success(!wxUserDao.existsById(id));
+    }
+
+    /**
+     * 微信用户登录
+     * @param wxLoginInfo
+     * @return
+     */
+    @Override
+    public WxUserResult userLogin(WxLoginInfo wxLoginInfo) {
+        return null;
     }
 
 

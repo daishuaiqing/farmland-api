@@ -1,11 +1,11 @@
 package com.daishuaiqing.farmland.controller;
 
 import com.daishuaiqing.farmland.domain.WxUser;
+import com.daishuaiqing.farmland.dto.WxLoginInfo;
 import com.daishuaiqing.farmland.service.WxUserService;
 import com.daishuaiqing.farmland.query.WxUserQuery;
 import com.daishuaiqing.farmland.vo.CommonResult;
 import com.daishuaiqing.farmland.query.PageParam;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +21,12 @@ public class WxUserController {
 
     @Autowired
     private WxUserService wxUserService;
+
+    @ApiOperation("微信用户登录")
+    @GetMapping("/wx/user/login")
+    public CommonResult userLogin(@RequestBody WxLoginInfo wxLoginInfo){
+        return new CommonResult().success(wxUserService.userLogin(wxLoginInfo));
+    }
 
     @ApiOperation("单个查询")
     @GetMapping("/wx_user/find/{id}")
