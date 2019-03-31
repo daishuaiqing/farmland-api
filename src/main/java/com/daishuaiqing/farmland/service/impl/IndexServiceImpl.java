@@ -9,14 +9,11 @@ import com.daishuaiqing.farmland.service.CategoryService;
 import com.daishuaiqing.farmland.service.GalleryService;
 import com.daishuaiqing.farmland.service.IndexService;
 import com.daishuaiqing.farmland.vo.CommonResult;
-import com.daishuaiqing.farmland.vo.IndexResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,33 +28,26 @@ public class IndexServiceImpl implements IndexService {
     private String imageUrlPrefix;
 
     /**
-     * 小程序首页数据集合
+     * 首页分类菜单加载
      * @return
      */
     @Override
-    public IndexResult index() {
-        IndexResult indexResult = new IndexResult();
+    public List<Category> indexCategory() {
         //按照权重由大到小排序
         Sort sort = new Sort(Sort.Direction.DESC, "orderWt");
         CategoryQuery categoryQuery = new CategoryQuery();
         //只查询需要显示的分类
         categoryQuery.setShow(1);
         List<Category> categories = categoryService.findAll(categoryQuery,sort);
-        if(categories.size()==0){
-            indexResult.setCategories(categories);
-            return indexResult;
-        }else{
-            indexResult.setCategories(categories);
-            PageParam pageParam = new PageParam();
-            Pageable pageable = PageRequest.of(pageParam.getPage(),pageParam.getSize());
-            GalleryQuery galleryQuery = new GalleryQuery();
-            galleryQuery.setCategoryId(categories.get(0).getId());
-            List<Gallery> galleries = galleryService.list(pageable,galleryQuery).getContent();
-            for (Gallery gallery: galleries){
-                gallery.setUrl(imageUrlPrefix+gallery.getUrl());
-            }
-            indexResult.setGalleries(galleries);
-            return indexResult;
+        return categories;
+    }
+
+    @Override
+    public CommonResult indexGallery(Pageable pageable, GalleryQuery galleryQuery) {
+        List<Gallery> galleries = galleryService.list(pageable,galleryQuery).getContent();
+        for (Gallery gallery: galleries){
+            gallery.setUrl(imageUrlPrefix+gallery.getUrl());
         }
+        return new CommonResult().success(galleries);
     }
 }
