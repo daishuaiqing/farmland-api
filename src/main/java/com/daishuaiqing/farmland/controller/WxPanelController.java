@@ -1,20 +1,10 @@
 package com.daishuaiqing.farmland.controller;
 
-import com.daishuaiqing.farmland.domain.WxPanel;
 import com.daishuaiqing.farmland.service.WxPanelService;
-import com.daishuaiqing.farmland.query.WxPanelQuery;
 import com.daishuaiqing.farmland.vo.CommonResult;
-import com.daishuaiqing.farmland.query.PageParam;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @RestController
 public class WxPanelController {
@@ -22,7 +12,14 @@ public class WxPanelController {
     @Autowired
     private WxPanelService wxPanelService;
 
-    @ApiOperation("单个查询")
+    @ApiOperation("微信用户个人中心 数据面板")
+    @GetMapping("/wx/user/panel/data")
+    public CommonResult findById(){
+        
+        return wxPanelService.findById(id);
+    }
+
+    /*@ApiOperation("单个查询")
     @GetMapping("/wx_panel/find/{id}")
     public CommonResult findById(@PathVariable("id") Long id){
         return wxPanelService.findById(id);
@@ -69,5 +66,5 @@ public class WxPanelController {
     public CommonResult list(PageParam page, WxPanelQuery wxPanelQuery) {
         Pageable pageable = PageRequest.of(page.getPage(),page.getSize());
         return wxPanelService.list(pageable,wxPanelQuery);
-    }
+    }*/
 }

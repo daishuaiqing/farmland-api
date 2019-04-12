@@ -5,7 +5,6 @@ import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-
 import java.time.LocalDateTime;
 
 
@@ -62,6 +61,18 @@ public class WxUser  {
      */
     @Column(name = "telephone")
     private String telephone;
+
+    /**
+     * 用户openID
+     */
+    @Column(name = "openid")
+    private String openid;
+
+    /**
+     * 用户的UnionID
+     */
+    @Column(name = "unionid")
+    private String unionid;
 
     /**
      * 是否是上传者：1是，0否

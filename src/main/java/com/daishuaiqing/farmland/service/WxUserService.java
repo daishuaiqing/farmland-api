@@ -22,4 +22,6 @@ public interface WxUserService {
     CommonResult deleteById(Long id);
 
     WxUserResult userLogin(WxLoginInfo wxLoginInfo);
+
+    Boolean tokenCheck(String token);
 }

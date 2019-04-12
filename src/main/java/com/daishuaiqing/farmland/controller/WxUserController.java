@@ -1,20 +1,12 @@
 package com.daishuaiqing.farmland.controller;
 
-import com.daishuaiqing.farmland.domain.WxUser;
 import com.daishuaiqing.farmland.dto.WxLoginInfo;
 import com.daishuaiqing.farmland.service.WxUserService;
-import com.daishuaiqing.farmland.query.WxUserQuery;
 import com.daishuaiqing.farmland.vo.CommonResult;
-import com.daishuaiqing.farmland.query.PageParam;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 
 @RestController
 public class WxUserController {
@@ -23,12 +15,18 @@ public class WxUserController {
     private WxUserService wxUserService;
 
     @ApiOperation("微信用户登录")
-    @GetMapping("/wx/user/login")
+    @PostMapping("/wx/user/login")
     public CommonResult userLogin(@RequestBody WxLoginInfo wxLoginInfo){
         return new CommonResult().success(wxUserService.userLogin(wxLoginInfo));
     }
 
-    @ApiOperation("单个查询")
+    @ApiOperation("微信用户登录")
+    @GetMapping("/wx/user/token/check")
+    public CommonResult tokenCheck(String token){
+        return new CommonResult().success(wxUserService.tokenCheck(token));
+    }
+
+    /*@ApiOperation("单个查询")
     @GetMapping("/wx_user/find/{id}")
     public CommonResult findById(@PathVariable("id") Long id){
         return wxUserService.findById(id);
@@ -75,5 +73,5 @@ public class WxUserController {
     public CommonResult list(PageParam page, WxUserQuery wxUserQuery) {
         Pageable pageable = PageRequest.of(page.getPage(),page.getSize());
         return wxUserService.list(pageable,wxUserQuery);
-    }
+    }*/
 }

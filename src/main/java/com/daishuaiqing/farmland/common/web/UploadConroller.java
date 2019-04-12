@@ -17,9 +17,8 @@ import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 public class UploadConroller {
@@ -30,33 +29,26 @@ public class UploadConroller {
 
     /**
      * 上传图片(单张)
-     * @param file 上传的文件z
+     * @param image 上传的文件
      * @return
      */
     @ApiOperation("图片上传")
     @PostMapping(value="/upload/image")
-    public Map<String,Object> upload(@RequestParam("file") MultipartFile file) {
-        /*获取图片的原始名称*/
-        String fileName = file.getOriginalFilename();
-        /*重命名文件名称*/
-        String imageName= UUID.randomUUID() + "." + fileName.substring(fileName.lastIndexOf(".") + 1);
-        /*图片存储的父级目录用时间命名*/
-        String dateStr= LocalDate.now().toString();
-        /*存储最终返回结果*/
-        Map<String,Object> result=new HashMap<String,Object>();
-        try {
-            /*存储图片*/
-            uploadService.saveImage(file.getBytes(),imageName,dateStr);
-        } catch (Exception e) {
-            /*如果存储发生异常，则返回图片出处发生异常的结果*/
-            result.put("statusCode",500);
-            result.put("erroMsg","图片存储失败，请检查存储路径是否存在或者是否有权限!");
-            return result;
-        }
-        /*图片存储成功之后,返回存储的路径*/
-        result.put("statusCode",200);
-        result.put("url","/image/"+dateStr+"/"+imageName);
+    public Map<String,String> upload(@RequestParam("image") MultipartFile image) throws Exception {
+        Map<String,String> result = new ConcurrentHashMap<>();
+        result.put("url",uploadService.saveImageByMultipartFile(image));
         return result;
+    }
+
+    @ApiOperation("批量上传图片")
+    @PostMapping(value="/upload/batch/image")
+    public List<String> batchUpload(@RequestParam("images") MultipartFile[] images) throws Exception {
+        List<String> imagesUrlList = new ArrayList<>();
+        for(MultipartFile image: images){
+            String url = uploadService.saveImageByMultipartFile(image);
+            imagesUrlList.add(url);
+        }
+        return imagesUrlList;
     }
 
 

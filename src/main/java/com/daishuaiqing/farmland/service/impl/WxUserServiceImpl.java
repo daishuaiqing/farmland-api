@@ -94,11 +94,27 @@ public class WxUserServiceImpl implements WxUserService {
 
     /**
      * 微信用户登录
+     * 逻辑：微信用户首次进入小程序-----需要提供code，和用户的信息进行登录
+     * 微信用户登陆成功之后会获得一个token令牌，如果用户在7天内没用登陆过小程序，token令牌将会失效；
+     * 用户打开小程序的时候会校验token令牌的有效性，如果用户的token令牌失效，将会重新登录；如果有效。将会刷新用户的token失效；
      * @param wxLoginInfo
      * @return
      */
     @Override
     public WxUserResult userLogin(WxLoginInfo wxLoginInfo) {
+
+        return null;
+    }
+
+    /**
+     * 校验微信用户token的有效性
+     * 有效：刷新token的有效期，返回true
+     * 失效：返回 false,让用户重新登录
+     * @param token
+     * @return
+     */
+    @Override
+    public Boolean tokenCheck(String token) {
         return null;
     }
 
