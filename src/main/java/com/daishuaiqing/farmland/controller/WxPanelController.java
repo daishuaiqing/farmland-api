@@ -1,6 +1,8 @@
 package com.daishuaiqing.farmland.controller;
 
+import com.daishuaiqing.farmland.dto.WxUserTokenInfo;
 import com.daishuaiqing.farmland.service.WxPanelService;
+import com.daishuaiqing.farmland.util.UserInfoUtils;
 import com.daishuaiqing.farmland.vo.CommonResult;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +13,14 @@ public class WxPanelController {
 
     @Autowired
     private WxPanelService wxPanelService;
+    @Autowired
+    private UserInfoUtils userInfoUtils;
 
     @ApiOperation("微信用户个人中心 数据面板")
     @GetMapping("/wx/user/panel/data")
     public CommonResult findById(){
-        
-        return wxPanelService.findById(id);
+        WxUserTokenInfo wxUserTokenInfo = userInfoUtils.getWxUserInfo();
+        return wxPanelService.findById(wxUserTokenInfo.getWxUserId());
     }
 
     /*@ApiOperation("单个查询")

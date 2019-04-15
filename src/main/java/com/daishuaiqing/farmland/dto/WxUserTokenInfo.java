@@ -2,6 +2,9 @@ package com.daishuaiqing.farmland.dto;
 
 import lombok.Data;
 
+/**
+ * Redis 中存放的微信用户信息
+ */
 @Data
 public class WxUserTokenInfo {
 

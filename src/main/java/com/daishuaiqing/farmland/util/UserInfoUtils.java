@@ -1,7 +1,6 @@
-package com.daishuaiqing.farmland.util;/*
-package com.daishuaiqing.template.utils;
+package com.daishuaiqing.farmland.util;
 
-import com.emojiet.gms.model.AdminInfo;
+import com.daishuaiqing.farmland.dto.WxUserTokenInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -13,47 +12,29 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class UserInfoUtils {
     @Autowired
-    RedisTemplate redisTemplate;
+    private RedisTemplate redisTemplate;
 
-    public AdminInfo getAdminInfo(){
+    /**
+     * 获取请求头携带token
+     * 使用token获取Redis中微信用户的信息
+     * @return
+     */
+    public WxUserTokenInfo getWxUserInfo(){
         HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
         String token = request.getHeader("token");
-        return (AdminInfo)redisTemplate.opsForValue().get(token);
+        return (WxUserTokenInfo)redisTemplate.opsForValue().get(token);
     }
-    public AdminInfo getAdminInfo(String token){
-        return (AdminInfo)redisTemplate.opsForValue().get(token);
-    }
-    public String setAdminInfo(AdminInfo adminInfo){
+
+    /**
+     * 将查询的微信用户的信息存入Redis
+     * @param userTokenInfo
+     * @return
+     */
+    public String setWxUserInfo(WxUserTokenInfo userTokenInfo){
         String token = UUID.randomUUID().toString();
-        redisTemplate.opsForValue().set(token,adminInfo);
+        redisTemplate.opsForValue().set(token,userTokenInfo);
         redisTemplate.expire(token,7, TimeUnit.DAYS);
         return token;
     }
-    */
-/*public MsShopAdmin getShopAdmin(){
-        HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
-        String token = request.getHeader("token");
-        return (MsShopAdmin)redisTemplate.opsForValue().get(token);
-    }
-
-    public void setAppUser(String key,MsAppUser msAppUser){
-        redisTemplate.opsForValue().set(key,msAppUser);
-        redisTemplate.expire(key,30, TimeUnit.DAYS);
-    }
-
-    public MsAppUser getAppUser(){
-        HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
-        String token = request.getHeader("token");
-        return (MsAppUser)redisTemplate.opsForValue().get(token);
-    }
-
-    public Object getAppUserByKey(String key){
-        return redisTemplate.opsForValue().get(key);
-    }
-
-    public Boolean deleteUserByKey(String key){
-        return redisTemplate.delete(key);
-    }*//*
 
 }
-*/
