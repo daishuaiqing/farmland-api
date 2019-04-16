@@ -5,6 +5,7 @@ import com.daishuaiqing.farmland.dto.WxLoginInfo;
 import com.daishuaiqing.farmland.query.WxUserQuery;
 import com.daishuaiqing.farmland.vo.CommonResult;
 import com.daishuaiqing.farmland.vo.WxUserResult;
+import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.data.domain.Pageable;
 
 public interface WxUserService {
@@ -21,7 +22,7 @@ public interface WxUserService {
 
     CommonResult deleteById(Long id);
 
-    WxUserResult userLogin(WxLoginInfo wxLoginInfo);
+    WxUserResult userLogin(WxLoginInfo wxLoginInfo) throws WxErrorException;
 
     Boolean tokenCheck(String token);
 }

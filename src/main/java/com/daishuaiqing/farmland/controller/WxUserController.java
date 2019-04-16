@@ -4,6 +4,7 @@ import com.daishuaiqing.farmland.dto.WxLoginInfo;
 import com.daishuaiqing.farmland.service.WxUserService;
 import com.daishuaiqing.farmland.vo.CommonResult;
 import io.swagger.annotations.ApiOperation;
+import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ public class WxUserController {
 
     @ApiOperation("微信用户登录")
     @PostMapping("/wx/user/login")
-    public CommonResult userLogin(@RequestBody WxLoginInfo wxLoginInfo){
+    public CommonResult userLogin(@RequestBody WxLoginInfo wxLoginInfo) throws WxErrorException {
         return new CommonResult().success(wxUserService.userLogin(wxLoginInfo));
     }
 

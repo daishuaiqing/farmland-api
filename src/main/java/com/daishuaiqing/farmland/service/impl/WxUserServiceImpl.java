@@ -1,6 +1,7 @@
 package com.daishuaiqing.farmland.service.impl;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
+import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import com.daishuaiqing.farmland.domain.WxUser;
 import com.daishuaiqing.farmland.dao.WxUserDao;
 import com.daishuaiqing.farmland.dto.WxLoginInfo;
@@ -8,6 +9,7 @@ import com.daishuaiqing.farmland.service.WxUserService;
 import com.daishuaiqing.farmland.query.WxUserQuery;
 import com.daishuaiqing.farmland.vo.CommonResult;
 import com.daishuaiqing.farmland.vo.WxUserResult;
+import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -104,8 +106,10 @@ public class WxUserServiceImpl implements WxUserService {
      * @return
      */
     @Override
-    public WxUserResult userLogin(WxLoginInfo wxLoginInfo) {
-
+    public WxUserResult userLogin(WxLoginInfo wxLoginInfo) throws WxErrorException {
+        WxMaJscode2SessionResult wxMaJscode2SessionResult = wxMaService.jsCode2SessionInfo(wxLoginInfo.getCode());
+        String openid = wxMaJscode2SessionResult.getOpenid();
+        String sessionKey = wxMaJscode2SessionResult.getSessionKey();
         return null;
     }
 
