@@ -1,5 +1,6 @@
 package com.daishuaiqing.farmland.service.impl;
 
+import cn.binarywang.wx.miniapp.api.WxMaService;
 import com.daishuaiqing.farmland.domain.WxUser;
 import com.daishuaiqing.farmland.dao.WxUserDao;
 import com.daishuaiqing.farmland.dto.WxLoginInfo;
@@ -25,6 +26,8 @@ public class WxUserServiceImpl implements WxUserService {
 
     @Autowired
     private WxUserDao wxUserDao;
+    @Autowired
+    private WxMaService wxMaService;
 
     /**
     * wxUser 设置默认值

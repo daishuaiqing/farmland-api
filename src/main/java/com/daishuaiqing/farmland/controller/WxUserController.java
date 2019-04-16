@@ -20,7 +20,7 @@ public class WxUserController {
         return new CommonResult().success(wxUserService.userLogin(wxLoginInfo));
     }
 
-    @ApiOperation("微信用户登录")
+    @ApiOperation("微信token校验是否有效")
     @GetMapping("/wx/user/token/check")
     public CommonResult tokenCheck(String token){
         return new CommonResult().success(wxUserService.tokenCheck(token));
