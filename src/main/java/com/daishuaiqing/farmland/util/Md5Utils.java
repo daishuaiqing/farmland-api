@@ -58,6 +58,6 @@ public class Md5Utils {
             }
             md5str.append(Integer.toHexString(digital));
         }
-        return md5str.toString().toUpperCase();
+        return md5str.toString();
     }
 }
