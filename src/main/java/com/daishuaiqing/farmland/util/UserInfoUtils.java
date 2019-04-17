@@ -22,7 +22,12 @@ public class UserInfoUtils {
     public WxUserTokenInfo getWxUserInfo(){
         HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
         String token = request.getHeader("token");
-        return (WxUserTokenInfo)redisTemplate.opsForValue().get(token);
+        Boolean hasKey = redisTemplate.hasKey(token);
+        if(hasKey){
+            return (WxUserTokenInfo)redisTemplate.opsForValue().get(token);
+        }else{
+            return null;
+        }
     }
 
     /**
@@ -37,4 +42,11 @@ public class UserInfoUtils {
         return token;
     }
 
+    /**
+     * 设置token过期时间 7 天
+     * @param token
+     */
+    public void flushToken(String token) {
+        redisTemplate.expire(token,7, TimeUnit.DAYS);
+    }
 }

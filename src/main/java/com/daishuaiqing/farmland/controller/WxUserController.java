@@ -27,11 +27,12 @@ public class WxUserController {
         return new CommonResult().success(wxUserService.tokenCheck(token));
     }
 
-    /*@ApiOperation("单个查询")
+    @ApiOperation("单个查询")
     @GetMapping("/wx_user/find/{id}")
     public CommonResult findById(@PathVariable("id") Long id){
         return wxUserService.findById(id);
     }
+    /*
 
     @ApiOperation("全部")
     @GetMapping("/wx_user/find/all")

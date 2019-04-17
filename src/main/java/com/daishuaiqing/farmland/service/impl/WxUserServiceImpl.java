@@ -5,15 +5,19 @@ import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import com.daishuaiqing.farmland.domain.WxUser;
 import com.daishuaiqing.farmland.dao.WxUserDao;
 import com.daishuaiqing.farmland.dto.WxLoginInfo;
+import com.daishuaiqing.farmland.dto.WxUserTokenInfo;
 import com.daishuaiqing.farmland.service.WxUserService;
 import com.daishuaiqing.farmland.query.WxUserQuery;
+import com.daishuaiqing.farmland.util.UserInfoUtils;
 import com.daishuaiqing.farmland.vo.CommonResult;
 import com.daishuaiqing.farmland.vo.WxUserResult;
 import me.chanjar.weixin.common.error.WxErrorException;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,6 +34,8 @@ public class WxUserServiceImpl implements WxUserService {
     private WxUserDao wxUserDao;
     @Autowired
     private WxMaService wxMaService;
+    @Autowired
+    private UserInfoUtils userInfoUtils;
 
     /**
     * wxUser 设置默认值
@@ -109,8 +115,55 @@ public class WxUserServiceImpl implements WxUserService {
     public WxUserResult userLogin(WxLoginInfo wxLoginInfo) throws WxErrorException {
         WxMaJscode2SessionResult wxMaJscode2SessionResult = wxMaService.jsCode2SessionInfo(wxLoginInfo.getCode());
         String openid = wxMaJscode2SessionResult.getOpenid();
-        String sessionKey = wxMaJscode2SessionResult.getSessionKey();
-        return null;
+        WxUser wxUser = wxUserDao.findByOpenid(openid);
+        if(ObjectUtils.isEmpty(wxUser)){
+            //不存在该用户，创建该用户
+            wxUser = new WxUser();
+            setDefaultValue(wxUser);
+            BeanUtils.copyProperties(wxLoginInfo.getUserInfo(),wxUser);
+            wxUser.setTelephone("");
+            wxUser.setOpenid(openid);
+            wxUser.setUnionid(wxMaJscode2SessionResult.getUnionid());
+            wxUser.setSessionKey(wxMaJscode2SessionResult.getSessionKey());
+            wxUser.setIsUploader(0);
+            wxUserDao.save(wxUser);
+        }else{
+            //如果存在这个用户，更新该用户的SessionKey,以及更新时间
+            wxUser.setSessionKey(wxMaJscode2SessionResult.getSessionKey());
+            wxUser.setUpdateTime(LocalDateTime.now());
+            wxUserDao.save(wxUser);
+        }
+        WxUserResult wxUserResult = new WxUserResult();
+        wxUserResult.setAvatar(wxUser.getAvatar());
+        wxUserResult.setNick(wxUser.getNick());
+        wxUserResult.setGender(genderToString(wxUser.getGender()));
+        wxUserResult.setUploader(wxUser.getIsUploader());
+        WxUserTokenInfo wxUserTokenInfo = new WxUserTokenInfo();
+        wxUserTokenInfo.setNick(wxUser.getNick());
+        wxUserTokenInfo.setGender(wxUser.getGender());
+        wxUserTokenInfo.setOpenid(wxUser.getOpenid());
+        wxUserTokenInfo.setTelephone(wxUser.getTelephone());
+        wxUserTokenInfo.setWxUserId(wxUser.getId());
+        wxUserResult.setToken(userInfoUtils.setWxUserInfo(wxUserTokenInfo));
+        return wxUserResult;
+    }
+
+    /**
+     *  Integer 性别转换成中文字符串
+     * @param gender
+     * @return
+     */
+    private String genderToString(Integer gender) {
+        switch (gender){
+            case 0:
+                return "未知";
+            case 1:
+                return "男";
+            case 2:
+                return "女";
+            default:
+                return "未知";
+        }
     }
 
     /**
@@ -122,7 +175,15 @@ public class WxUserServiceImpl implements WxUserService {
      */
     @Override
     public Boolean tokenCheck(String token) {
-        return null;
+        WxUserTokenInfo wxUserTokenInfo = userInfoUtils.getWxUserInfo();
+        if(ObjectUtils.isEmpty(wxUserTokenInfo)){
+            //不存在则说明失效
+            return false;
+        }else{
+            //刷新token有效期
+            userInfoUtils.flushToken(token);
+            return true;
+        }
     }
 
 
