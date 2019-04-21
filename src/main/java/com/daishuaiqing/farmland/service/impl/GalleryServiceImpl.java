@@ -2,8 +2,10 @@ package com.daishuaiqing.farmland.service.impl;
 
 import com.daishuaiqing.farmland.domain.Gallery;
 import com.daishuaiqing.farmland.dao.GalleryDao;
+import com.daishuaiqing.farmland.dto.GalleryInfo;
 import com.daishuaiqing.farmland.service.GalleryService;
 import com.daishuaiqing.farmland.query.GalleryQuery;
+import com.daishuaiqing.farmland.util.UserInfoUtils;
 import com.daishuaiqing.farmland.vo.CommonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -11,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,6 +28,8 @@ public class GalleryServiceImpl implements GalleryService {
 
     @Autowired
     private GalleryDao galleryDao;
+    @Autowired
+    private UserInfoUtils userInfoUtils;
 
     /**
     * gallery 设置默认值
@@ -47,10 +52,19 @@ public class GalleryServiceImpl implements GalleryService {
         return new CommonResult().success(galleryDao.findAll());
     }
 
+    @Transactional
     @Override
-    public CommonResult add(Gallery gallery) {
-        setDefaultValue(gallery);
-        return new CommonResult().success(galleryDao.save(gallery));
+    public CommonResult add(GalleryInfo galleryInfo) {
+        for (String url: galleryInfo.getUrls()){
+            Gallery gallery = new Gallery();
+            setDefaultValue(gallery);
+            gallery.setUploaderId(userInfoUtils.getWxUserInfo().getWxUserId());
+            gallery.setCategoryId(galleryInfo.getCategoryId());
+            gallery.setUrl(url);
+            gallery.setCollectionCnt(0);
+            galleryDao.save(gallery);
+        }
+        return new CommonResult().success(true);
     }
 
     @Override

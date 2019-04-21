@@ -123,7 +123,7 @@ public class WxUserServiceImpl implements WxUserService {
             BeanUtils.copyProperties(wxLoginInfo.getUserInfo(),wxUser);
             wxUser.setTelephone("");
             wxUser.setOpenid(openid);
-            wxUser.setUnionid(wxMaJscode2SessionResult.getUnionid());
+            wxUser.setUnionid(wxMaJscode2SessionResult.getUnionid() == null ? "": wxMaJscode2SessionResult.getUnionid());
             wxUser.setSessionKey(wxMaJscode2SessionResult.getSessionKey());
             wxUser.setIsUploader(0);
             wxUserDao.save(wxUser);

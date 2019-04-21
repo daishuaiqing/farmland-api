@@ -1,11 +1,11 @@
 package com.daishuaiqing.farmland.controller;
 
 import com.daishuaiqing.farmland.domain.Gallery;
+import com.daishuaiqing.farmland.dto.GalleryInfo;
 import com.daishuaiqing.farmland.service.GalleryService;
 import com.daishuaiqing.farmland.query.GalleryQuery;
 import com.daishuaiqing.farmland.vo.CommonResult;
 import com.daishuaiqing.farmland.query.PageParam;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +36,12 @@ public class GalleryController {
 
     @ApiOperation("新增")
     @PostMapping("/gallery/add")
-    public CommonResult add(@Valid @ApiParam @RequestBody Gallery gallery,
+    public CommonResult add(@Valid @ApiParam @RequestBody GalleryInfo galleryInfo,
                             BindingResult bindingResult) {
         if(bindingResult.hasErrors()){
             return new CommonResult().validateFailed(bindingResult.getFieldError().getDefaultMessage());
         }else {
-            return galleryService.add(gallery);
+            return galleryService.add(galleryInfo);
         }
     }
 
