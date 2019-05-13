@@ -4,11 +4,13 @@ import com.daishuaiqing.farmland.domain.WxPanel;
 import com.daishuaiqing.farmland.dao.WxPanelDao;
 import com.daishuaiqing.farmland.service.WxPanelService;
 import com.daishuaiqing.farmland.query.WxPanelQuery;
+import com.daishuaiqing.farmland.util.UserInfoUtils;
 import com.daishuaiqing.farmland.vo.CommonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,6 +25,8 @@ public class WxPanelServiceImpl implements WxPanelService {
 
     @Autowired
     private WxPanelDao wxPanelDao;
+    @Autowired
+    private UserInfoUtils userInfoUtils;
 
     /**
     * wxPanel 设置默认值
@@ -36,8 +40,20 @@ public class WxPanelServiceImpl implements WxPanelService {
     }
 
     @Override
-    public CommonResult findById(Long id) {
-        return new CommonResult().success(wxPanelDao.findById(id).orElse(null));
+    public CommonResult findByWxUserId(Long id) {
+        WxPanel wxPanel = wxPanelDao.findByWxUid(id);
+        if(ObjectUtils.isEmpty(wxPanel)){
+            WxPanel insert = new WxPanel();
+            setDefaultValue(insert);
+            insert.setCollectonCnt(0);
+            insert.setFansCnt(0);
+            insert.setFollowCnt(0);
+            insert.setWxUid(id);
+            insert.setUploadCnt(0);
+            wxPanelDao.save(insert);
+            wxPanel = insert;
+        }
+        return new CommonResult().success(wxPanel);
     }
 
     @Override
@@ -88,6 +104,13 @@ public class WxPanelServiceImpl implements WxPanelService {
     public CommonResult deleteById(Long id) {
         wxPanelDao.deleteById(id);
         return new CommonResult().success(!wxPanelDao.existsById(id));
+    }
+
+    @Override
+    public void updateUploadCnt(Long wxUid, int size) {
+        WxPanel wxPanel = wxPanelDao.findByWxUid(wxUid);
+        wxPanel.setUploadCnt(wxPanel.getUploadCnt() + size);
+        wxPanelDao.save(wxPanel);
     }
 
 

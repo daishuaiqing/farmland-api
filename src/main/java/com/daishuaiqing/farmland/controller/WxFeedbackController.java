@@ -35,7 +35,7 @@ public class WxFeedbackController {
     }
 
     @ApiOperation("新增")
-    @PostMapping("/wx_feedback/add")
+    @PostMapping("/wx/feedback/add")
     public CommonResult add(@Valid @ApiParam @RequestBody WxFeedback wxFeedback,
                             BindingResult bindingResult) {
         if(bindingResult.hasErrors()){

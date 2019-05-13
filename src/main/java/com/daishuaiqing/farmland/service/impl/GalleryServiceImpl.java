@@ -5,6 +5,7 @@ import com.daishuaiqing.farmland.dao.GalleryDao;
 import com.daishuaiqing.farmland.dto.GalleryInfo;
 import com.daishuaiqing.farmland.service.GalleryService;
 import com.daishuaiqing.farmland.query.GalleryQuery;
+import com.daishuaiqing.farmland.service.WxPanelService;
 import com.daishuaiqing.farmland.util.UserInfoUtils;
 import com.daishuaiqing.farmland.vo.CommonResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,8 @@ public class GalleryServiceImpl implements GalleryService {
     private GalleryDao galleryDao;
     @Autowired
     private UserInfoUtils userInfoUtils;
+    @Autowired
+    private WxPanelService wxPanelService;
 
     /**
     * gallery 设置默认值
@@ -55,15 +58,17 @@ public class GalleryServiceImpl implements GalleryService {
     @Transactional
     @Override
     public CommonResult add(GalleryInfo galleryInfo) {
+        Long wxUid = userInfoUtils.getWxUserInfo().getWxUserId();
         for (String url: galleryInfo.getUrls()){
             Gallery gallery = new Gallery();
             setDefaultValue(gallery);
-            gallery.setUploaderId(userInfoUtils.getWxUserInfo().getWxUserId());
+            gallery.setUploaderId(wxUid);
             gallery.setCategoryId(galleryInfo.getCategoryId());
             gallery.setUrl(url);
             gallery.setCollectionCnt(0);
             galleryDao.save(gallery);
         }
+        wxPanelService.updateUploadCnt(wxUid, galleryInfo.getUrls().size());
         return new CommonResult().success(true);
     }
 

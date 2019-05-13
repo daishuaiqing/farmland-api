@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface WxPanelService {
 
-    CommonResult findById(Long id);
+    CommonResult findByWxUserId(Long id);
 
     CommonResult findAll();
 
@@ -19,4 +19,5 @@ public interface WxPanelService {
 
     CommonResult deleteById(Long id);
 
+    void updateUploadCnt(Long wxUid, int size);
 }

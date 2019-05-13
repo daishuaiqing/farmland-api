@@ -18,9 +18,9 @@ public class WxPanelController {
 
     @ApiOperation("微信用户个人中心 数据面板")
     @GetMapping("/wx/user/panel/data")
-    public CommonResult findById(){
+    public CommonResult findByWxUserId(){
         WxUserTokenInfo wxUserTokenInfo = userInfoUtils.getWxUserInfo();
-        return wxPanelService.findById(wxUserTokenInfo.getWxUserId());
+        return wxPanelService.findByWxUserId(wxUserTokenInfo.getWxUserId());
     }
 
     /*@ApiOperation("单个查询")
